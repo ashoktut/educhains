@@ -41,12 +41,16 @@ contract EduChain is
         Accepted, // 4
         Applied_Nsfas, // 5
         Approved, // 6
-        Paid_Books, // 7
-        Paid_Monthly, // 8
-        Paid_Rent, // 9
-        Paid_Fees, // 10
-        Eligible, // 11
-        Graduated // 12
+        Requested_BookFunds, // 7
+        Paid_Books, // 8
+        Requested_MonthlyFunds, // 9
+        Paid_Monthly, // 10
+        Requested_Rent, // 11
+        Paid_Rent, // 12
+        Requested_UniFees, // 13
+        Paid_Fees, // 14
+        Eligible, // 15
+        Graduated // 16
     }
 
     State constant defaultState = State.Applied_Uni;
@@ -82,9 +86,13 @@ contract EduChain is
     event Accepted(uint256 upc);
     event Applied_Nsfas(uint256 upc);
     event Approved(uint256 upc);
+    event Requested_BookFunds(uint256 upc);
     event Paid_Books(uint256 upc);
+    event Requested_MonthlyFunds(uint256 upc);
     event Paid_Monthly(uint256 upc);
+    event Requested_Rent(uint256 upc);
     event Paid_Rent(uint256 upc);
+    event Requested_UniFees(uint256 upc);
     event Paid_Fees(uint256 upc);
     event Eligible(uint256 upc);
     event Graduated(uint256 upc);
@@ -244,11 +252,11 @@ contract EduChain is
         address _originStudentID,
         string memory _studentName,
         string memory _studentSurname,
-        string memory _personID,
+        // string memory _personID,
         string memory _courseName,
         string memory _uniName,
-        address _uniID,
-        string memory _productNotes
+        address _uniID
+        //string memory _productNotes
     ) public onlyStudent {
         // Add the new person as part of applied
         persons[_upc].upc = _upc;
@@ -258,7 +266,7 @@ contract EduChain is
         persons[_upc].originStudentID = _originStudentID;
         persons[_upc].studentName = _studentName;
         persons[_upc].studentSurname = _studentSurname;
-        persons[_upc].personID = _upc + sku; // Product ID is a combo of upc + sku
+        //persons[_upc].personID = _upc + sku; // Product ID is a combo of upc + sku
         persons[_upc].courseName = _courseName;
         persons[_upc].uniName = _uniName;
         persons[_upc].uniID = _uniID;
@@ -346,6 +354,17 @@ contract EduChain is
             persons[_upc].nsfasID = msg.sender;
             persons[_upc].personState = State.Approved;
             emit Approved(_upc);
+        }
+
+    function reqBookFund(uint256 _upc, uint256 _)
+        public
+        // Call modifier to check if upc has passed previous process
+        approved(_upc)
+        // Call modifier to verify caller of this function
+        verifyCaller(persons[_upc].originStudentID)
+        {
+            // Update the appropriate fields
+            persons[_upc].personState = 
         }
 
     
