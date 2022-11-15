@@ -41,12 +41,16 @@ contract EduChain is
         Accepted, // 4
         Applied_Nsfas, // 5
         Approved, // 6
-        Paid_Books, // 7
-        Paid_Monthly, // 8
-        Paid_Rent, // 9
-        Paid_Fees, // 10
-        Eligible, // 11
-        Graduated // 12
+        Requested_BookFunds, // 7
+        Paid_Books, // 8
+        Requested_MonthlyFunds, // 9
+        Paid_Monthly, // 10
+        Requested_Rent, // 11
+        Paid_Rent, // 12
+        Requested_UniFees, // 13
+        Paid_Fees, // 14
+        Eligible, // 15
+        Graduated // 16
     }
 
     State constant defaultState = State.Applied_Uni;
@@ -82,9 +86,13 @@ contract EduChain is
     event Accepted(uint256 upc);
     event Applied_Nsfas(uint256 upc);
     event Approved(uint256 upc);
+    event Requested_BookFunds(uint256 upc);
     event Paid_Books(uint256 upc);
+    event Requested_MonthlyFunds(uint256 upc);
     event Paid_Monthly(uint256 upc);
+    event Requested_Rent(uint256 upc);
     event Paid_Rent(uint256 upc);
+    event Requested_UniFees(uint256 upc);
     event Paid_Fees(uint256 upc);
     event Eligible(uint256 upc);
     event Graduated(uint256 upc);
@@ -194,8 +202,20 @@ contract EduChain is
     }
 
     // Define a modifier that checks if a person.state of a upc has applied
+    modifier requested_bookfunds(uint256 _upc) {
+        require(persons[_upc].personState == State.Requested_BookFunds, "Book Funds not requested");
+        _;
+    }
+
+    // Define a modifier that checks if a person.state of a upc has applied
     modifier paid_books(uint256 _upc) {
         require(persons[_upc].personState == State.Paid_Books, "Person has not been paid book funds");
+        _;
+    }
+
+    // Define a modifier that checks if a person.state of a upc has applied
+    modifier requested_monthlyfunds(uint256 _upc) {
+        require(persons[_upc].personState == State.Requested_MonthlyFunds, "Monthly Funds not requested");
         _;
     }
 
@@ -206,8 +226,20 @@ contract EduChain is
     }
 
     // Define a modifier that checks if a person.state of a upc has applied
+    modifier requested_rentfunds(uint256 _upc) {
+        require(persons[_upc].personState == State.Requested_Rent, "Rent Funds not requested");
+        _;
+    }
+
+    // Define a modifier that checks if a person.state of a upc has applied
     modifier paid_rent(uint256 _upc) {
         require(persons[_upc].personState == State.Paid_Rent, "Person has not paid rent");
+        _;
+    }
+
+    // Define a modifier that checks if a person.state of a upc has applied
+    modifier requested_unifunds(uint256 _upc) {
+        require(persons[_upc].personState == State.Requested_UniFees, "Book Funds not requested");
         _;
     }
 
@@ -244,11 +276,11 @@ contract EduChain is
         address _originStudentID,
         string memory _studentName,
         string memory _studentSurname,
-        string memory _personID,
+        // string memory _personID,
         string memory _courseName,
         string memory _uniName,
-        address _uniID,
-        string memory _productNotes
+        address _uniID
+        //string memory _productNotes
     ) public onlyStudent {
         // Add the new person as part of applied
         persons[_upc].upc = _upc;
@@ -258,7 +290,7 @@ contract EduChain is
         persons[_upc].originStudentID = _originStudentID;
         persons[_upc].studentName = _studentName;
         persons[_upc].studentSurname = _studentSurname;
-        persons[_upc].personID = _upc + sku; // Product ID is a combo of upc + sku
+        //persons[_upc].personID = _upc + sku; // Product ID is a combo of upc + sku
         persons[_upc].courseName = _courseName;
         persons[_upc].uniName = _uniName;
         persons[_upc].uniID = _uniID;
@@ -348,7 +380,119 @@ contract EduChain is
             emit Approved(_upc);
         }
 
-    
+    function reqBookFund(uint256 _upc, uint256 _bookPrice)
+        public
+        // Call modifier to check if upc has passed previous process
+        approved(_upc)
+        // Call modifier to verify caller of this function
+        verifyCaller(persons[_upc].originStudentID)
+        {
+            // Update the appropriate fields
+            persons[_upc].personState = State.Requested_BookFunds;
+            persons[_upc].bookPrice = _bookPrice;
+            // Emit the appropriate event
+            emit Requested_BookFunds(_upc);
+        }
+
+    function payBooks(uint256 _upc)
+        public
+        payable
+        // Call modifier to check if upc has passed previous process
+        requested_bookfunds(_upc)
+
+        // Call modifier to check if NSFAS has paid enough
+        paidEnoughBook(persons[_upc].bookPrice)
+
+        // Call modifier to send any excess ether back to Nsfas
+        checkBookValue(_upc)
+        {
+            // Update the appropriate fields - ownerID, nsfasID, personState
+            persons[_upc].ownerID = msg.sender;
+            persons[_upc].nsfasID = msg.sender;
+            persons[_upc].personState = State.Paid_Books;
+
+            // Transfer money to student
+            payable(persons[_upc].nsfasID).transfer(persons[_upc].bookPrice);
+
+            // emit the appropriate event
+            emit Paid_Books(_upc);
+        }
+
+    function reqMonthlyFund(uint256 _upc, uint256 _monthlyPrice)
+        public
+        // Call modifier to check if upc has passed previous process
+        paid_books(_upc)
+        // Call modifier to verify caller of this function
+        verifyCaller(persons[_upc].originStudentID)
+        {
+            // Update the appropriate fields
+            persons[_upc].personState = State.Requested_MonthlyFunds;
+            persons[_upc].monthlyPrice = _monthlyPrice;
+            // Emit the appropriate event
+            emit Requested_MonthlyFunds(_upc);
+        }
+
+    function payMonthly(uint256 _upc)
+        public
+        payable
+        // Call modifier to check if upc has passed previous process
+        requested_monthlyfunds(_upc)
+
+        // Call modifier to check if NSFAS has paid enough
+        paidEnoughMonthly(persons[_upc].monthlyPrice)
+
+        // Call modifier to send any excess ether back to Nsfas
+        checkMonthlyValue(_upc)
+        {
+            // Update the appropriate fields - ownerID, nsfasID, personState
+            persons[_upc].ownerID = msg.sender;
+            persons[_upc].nsfasID = msg.sender;
+            persons[_upc].personState = State.Paid_Monthly;
+
+            // Transfer money to student
+            payable(persons[_upc].nsfasID).transfer(persons[_upc].monthlyPrice);
+
+            // emit the appropriate event
+            emit Paid_Monthly(_upc);
+        }
+
+    function reqRentFund(uint256 _upc, uint256 _rentPrice)
+        public
+        // Call modifier to check if upc has passed previous process
+        paid_monthly(_upc)
+        // Call modifier to verify caller of this function
+        verifyCaller(persons[_upc].accommodationID)
+        {
+            // Update the appropriate fields
+            persons[_upc].personState = State.Requested_Rent;
+            persons[_upc].rentPrice = _rentPrice;
+            // Emit the appropriate event
+            emit Requested_MonthlyFunds(_upc);
+        }
+
+    function payRent(uint256 _upc)
+        public
+        payable
+        // Call modifier to check if upc has passed previous process
+        requested_rentfunds(_upc)
+
+        // Call modifier to check if NSFAS has paid enough
+        paidEnoughRent(persons[_upc].rentPrice)
+
+        // Call modifier to send any excess ether back to Nsfas
+        checkRentValue(_upc)
+        {
+            // Update the appropriate fields - ownerID, nsfasID, personState
+            persons[_upc].ownerID = msg.sender;
+            persons[_upc].nsfasID = msg.sender;
+            persons[_upc].personState = State.Paid_Rent;
+
+            // Transfer money to student
+            payable(persons[_upc].nsfasID).transfer(persons[_upc].monthlyPrice);
+
+            // emit the appropriate event
+            emit Paid_Monthly(_upc);
+        }
 
     
     
