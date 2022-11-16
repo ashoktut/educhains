@@ -63,7 +63,7 @@ contract EduChain is
         address originStudentID; // Metamask-Ethereum address of the Student
         string studentName; // Student Name
         string studentSurname; // Student Surname
-        string personID; // Person ID potentially a combination of upc + sku
+        uint256 personID; // Person ID potentially a combination of upc + sku
         string courseName; // Course Applying for by person
         string uniName; // University that the person applying to
         uint256 bookPrice; // Book Price
@@ -72,7 +72,7 @@ contract EduChain is
         uint256 feesPrice; // University Fees Price
         uint256 passRate; // Pass rate of the student
         State personState; // Person State as represented in the enum above
-        address studentID; // Metamask-Ethereum address of the student
+        // address studentID; // Metamask-Ethereum address of the student
         address uniID; // Metamask-Ethereum address of the University
         address accommodationID; // Metamask-Ethereum address of the Accommodation
         address nsfasID; // Metamask-Ethereum address of Nsfas
@@ -285,12 +285,12 @@ contract EduChain is
         // Add the new person as part of applied
         persons[_upc].upc = _upc;
         persons[_upc].sku = sku;
-        // persons[_upc].ownerID = msg.sender;
+        persons[_upc].ownerID = msg.sender;
         persons[_upc].ownerID = _originStudentID;
         persons[_upc].originStudentID = _originStudentID;
         persons[_upc].studentName = _studentName;
         persons[_upc].studentSurname = _studentSurname;
-        //persons[_upc].personID = _upc + sku; // Product ID is a combo of upc + sku
+        persons[_upc].personID = _upc + sku; // Product ID is a combo of upc + sku
         persons[_upc].courseName = _courseName;
         persons[_upc].uniName = _uniName;
         persons[_upc].uniID = _uniID;
@@ -320,10 +320,10 @@ contract EduChain is
         // call modifier to check if upc has passed previous process
         admitted(_upc)
         // call modifier to verify caller of this function
-        verifyCaller(persons[_upc].studentID)
+        verifyCaller(persons[_upc].originStudentID)
         {
             persons[_upc].ownerID = msg.sender;
-            persons[_upc].studentID = msg.sender;
+            persons[_upc].originStudentID = msg.sender;
             persons[_upc].personState = State.Registered;
             emit Registered(_upc);
         }
@@ -333,10 +333,10 @@ contract EduChain is
         // call modifier to check if upc has passed previous process
         registered(_upc)
         // call modifier to verify caller of this function
-        verifyCaller(persons[_upc].studentID)
+        verifyCaller(persons[_upc].originStudentID)
         {
             persons[_upc].ownerID = msg.sender;
-            persons[_upc].studentID = msg.sender;
+            persons[_upc].originStudentID = msg.sender;
             persons[_upc].personState = State.Applied_Accommodation;
             emit Applied_Accommodation(_upc);
         }
@@ -359,10 +359,10 @@ contract EduChain is
         // call modifier to check if upc has passed previous process
         registered(_upc)
         // call modifier to verify caller of this function
-        verifyCaller(persons[_upc].studentID)
+        verifyCaller(persons[_upc].originStudentID)
         {
             persons[_upc].ownerID = msg.sender;
-            persons[_upc].studentID = msg.sender;
+            persons[_upc].originStudentID = msg.sender;
             persons[_upc].personState = State.Applied_Nsfas;
             emit Applied_Nsfas(_upc);
         }
@@ -494,6 +494,97 @@ contract EduChain is
             emit Paid_Monthly(_upc);
         }
 
-    
+    // Define a function 'fetchItemBufferOne' that fetches the data
+    function fetchPersonBufferOne(uint256 _upc)
+        public
+        view
+        returns (
+            uint256 personSKU,
+            uint256 personUPC,
+            address ownerID,
+            address originStudentID,
+            string memory studentName,
+            string memory studentSurname
+
+        )
+    {
+        // Assign values to the 8 parameters
+        personSKU = persons[_upc].sku;
+        personUPC = persons[_upc].upc;
+        ownerID = persons[_upc].ownerID;
+        originStudentID = persons[_upc].originStudentID;
+        studentName = persons[_upc].studentName;
+        studentSurname = persons[_upc].studentSurname;
+
+        return (
+            personSKU,
+            personUPC,
+            ownerID,
+            originStudentID,
+            studentName,
+            studentSurname
+        );
+    }
+
+    // Define a function 'fetchPersonBufferTwo' that fetches the data
+    function fetchPersonBufferTWo(uint256 _upc)
+        public
+        view
+        returns (
+            uint256 personSKU,
+            uint256 personUPC,
+            uint256 personID,
+            string memory studentName,
+            string memory studentSurname, // Student Surname
+            string memory uniName,
+            string memory courseName, // Course Applying for by person
+            uint256 bookPrice, // Book Price
+            uint256 monthlyPrice, // Monthly Price
+            uint256 rentPrice, // Accommodation Price
+            uint256 feesPrice, // University Fees Price
+            // uint256 passRate; // Pass rate of the student
+            uint256 personState, // Person State as represented in the enum above
+            // address studentID; // Metamask-Ethereum address of the student
+            address uniID, // Metamask-Ethereum address of the University
+            address accommodationID, // Metamask-Ethereum address of the Accommodation
+            address nsfasID // Metamask-Ethereum address of Nsfas
+            
+        )
+    {
+        // Assign values to the 15 or 16 parameters
+        personSKU = persons[_upc].sku;
+        personUPC = persons[_upc].upc;
+        personID = persons[_upc].personID;
+        studentName = persons[_upc].studentName;
+        studentSurname = persons[_upc].studentSurname;
+        uniName = persons[_upc].uniName;
+        courseName = persons[_upc].courseName;
+        bookPrice = persons[_upc].bookPrice;
+        monthlyPrice = persons[_upc].monthlyPrice;
+        rentPrice = persons[_upc].rentPrice;
+        feesPrice = persons[_upc].feesPrice;
+        personState = uint256(persons[_upc].personState);
+        uniID = persons[_upc].uniID;
+        accommodationID = persons[_upc].accommodationID;
+        nsfasID = persons[_upc].nsfasID;
+
+        return (
+            personSKU,
+            personUPC,
+            personID,
+            studentName,
+            studentSurname,
+            uniName,
+            courseName,
+            bookPrice,
+            monthlyPrice,
+            rentPrice,
+            feesPrice,
+            personState,
+            uniID,
+            accommodationID,
+            nsfasID
+        );
+    }
     
 }
