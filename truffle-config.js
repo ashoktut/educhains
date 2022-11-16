@@ -39,14 +39,21 @@ module.exports = {
 
     // Useful for deploying to a public network.
     // NB: It's important to wrap the provider as a function.
-    rinkeby: {
-      provider: () => new HDWalletProvider(mnemonic, `https://rinkeby.infura.io/v3/3acfd61b474d42c1ae20d1deeaf021a7`),
-      network_id: 4,       // Rinkeby's id
-      gas: 4500000,        // Rinkeby has a lower block limit than mainnet
+    // rinkeby: {
+    //   provider: () => new HDWalletProvider(mnemonic, `https://rinkeby.infura.io/v3/3acfd61b474d42c1ae20d1deeaf021a7`),
+    //   network_id: 4,       // Rinkeby's id
+    //   gas: 4500000,        // Rinkeby has a lower block limit than mainnet
+    //   gasPrice: 10000000000,
+    //   // confirmations: 2,    // # of confs to wait between deployments. (default: 0)
+    //   // timeoutBlocks: 200,  // # of blocks before a deployment times out  (minimum/default: 50)
+    //   // skipDryRun: false     // Skip dry run before migrations? (default: false for public nets )
+    // },
+
+    goerli: {
+      provider: () => new HDWalletProvider(mnemonic, 'https://goerli.infura.io/v3/3acfd61b474d42c1ae20d1deeaf021a7'),
+      network_id: '5', // Goerli's ID
+      gas: 4465030,    // Goerli has a lower block limit than mainnet
       gasPrice: 10000000000,
-      // confirmations: 2,    // # of confs to wait between deployments. (default: 0)
-      // timeoutBlocks: 200,  // # of blocks before a deployment times out  (minimum/default: 50)
-      // skipDryRun: false     // Skip dry run before migrations? (default: false for public nets )
     },
   },
    // Set default mocha options here, use special reporters etc.

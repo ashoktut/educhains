@@ -527,7 +527,7 @@ contract EduChain is
     }
 
     // Define a function 'fetchPersonBufferTwo' that fetches the data
-    function fetchPersonBufferTWo(uint256 _upc)
+    function fetchPersonBufferTwo(uint256 _upc)
         public
         view
         returns (
