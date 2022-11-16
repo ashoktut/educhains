@@ -307,7 +307,8 @@ contract EduChain is
         // call modifier to check if upc has passed previous process
         applied_uni(_upc)
         // call modifier to verify caller of this function
-        verifyCaller(persons[_upc].uniID)
+        // verifyCaller(persons[_upc].uniID)
+        onlyUniversity
         {
             persons[_upc].ownerID = msg.sender;
             persons[_upc].uniID = msg.sender;

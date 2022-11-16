@@ -85,8 +85,21 @@ contract('EduChain', function(accounts) {
     })
 
     // 2nd Test
-    it("Testing smart contract function admit() that allows a university to admit a student")
+    it("Testing smart contract function admit() that allows a university to admit a student", async() => {
         const eduChain = await EduChain.deployed()
+        await eduChain.addUniversity(uniID)
+        personState++;
+        // Declare and Initialize a variable for event
+        var eventEmitted = false
+
+        // Watch the emitted event Applied_Uni()
+        eduChain.Admitted(null, (error, event)=> {
+            eventEmitted = true
+        })
+
+        // Mark a person as admitted by calling function admit()
+        var event = await eduChain.admit(upc, {from: originStudentID});
+    })
 
 
 });
