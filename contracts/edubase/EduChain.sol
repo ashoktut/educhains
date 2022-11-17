@@ -322,6 +322,7 @@ contract EduChain is
         admitted(_upc)
         // call modifier to verify caller of this function
         verifyCaller(persons[_upc].originStudentID)
+        onlyStudent
         {
             persons[_upc].ownerID = msg.sender;
             persons[_upc].originStudentID = msg.sender;
@@ -335,6 +336,7 @@ contract EduChain is
         registered(_upc)
         // call modifier to verify caller of this function
         verifyCaller(persons[_upc].originStudentID)
+        onlyStudent
         {
             persons[_upc].ownerID = msg.sender;
             persons[_upc].originStudentID = msg.sender;
@@ -361,6 +363,7 @@ contract EduChain is
         registered(_upc)
         // call modifier to verify caller of this function
         verifyCaller(persons[_upc].originStudentID)
+        onlyStudent
         {
             persons[_upc].ownerID = msg.sender;
             persons[_upc].originStudentID = msg.sender;
@@ -468,14 +471,14 @@ contract EduChain is
             persons[_upc].personState = State.Requested_Rent;
             persons[_upc].rentPrice = _rentPrice;
             // Emit the appropriate event
-            emit Requested_MonthlyFunds(_upc);
+            emit Requested_Rent(_upc);
         }
 
     function payRent(uint256 _upc)
         public
         payable
         // Call modifier to check if upc has passed previous process
-        requested_rentfunds(_upc)
+        requested_monthlyfunds(_upc)
 
         // Call modifier to check if NSFAS has paid enough
         paidEnoughRent(persons[_upc].rentPrice)
@@ -492,7 +495,44 @@ contract EduChain is
             payable(persons[_upc].nsfasID).transfer(persons[_upc].monthlyPrice);
 
             // emit the appropriate event
-            emit Paid_Monthly(_upc);
+            emit Paid_Rent(_upc);
+        }
+
+    function reqFeesFund(uint256 _upc, uint256 _feesPrice)
+        public
+        // Call modifier to check if upc has passed previous process
+        paid_rent(_upc)
+        // Call modifier to verify caller of this function
+        verifyCaller(persons[_upc].uniID)
+        {
+            // Update the appropriate fields
+            persons[_upc].personState = State.Requested_UniFees;
+            persons[_upc].feesPrice = _feesPrice;
+            // Emit the appropriate event
+            emit Requested_UniFees(_upc);
+        }
+
+    function payFees(uint256 _upc)
+        public
+        payable
+        // Call modifier to check if upc has passed previous process
+        requested_unifunds(_upc)
+        // Call modifier to verify if NSFAS has paid enough
+        paidEnoughFees(persons[_upc].feesPrice)
+
+        // Call modifier to send any excess ether back to Nsfas
+        checkFeesValue(_upc)
+        {
+            // Update the appropriate fields - ownerID, nsfasID, personState
+            persons[_upc].ownerID = msg.sender;
+            persons[_upc].nsfasID = msg.sender;
+            persons[_upc].personState = State.Paid_Fees;
+
+            // Transfer money to university
+            payable(persons[_upc].nsfasID).transfer(persons[_upc].feesPrice);
+
+            // emit the appropriate event
+            emit Paid_Fees(_upc);
         }
 
     // Define a function 'fetchItemBufferOne' that fetches the data

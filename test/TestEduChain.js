@@ -98,7 +98,302 @@ contract('EduChain', function(accounts) {
         })
 
         // Mark a person as admitted by calling function admit()
-        var event = await eduChain.admit(upc, {from: originStudentID});
+        let event = await eduChain.admit(upc, {from: originStudentID});
+
+        // Determine if the event has been emited using 'truffleAssert'
+        truffleAssert.eventEmitted(event, 'Admitted');
+
+        // Retrieve the just now saved item from blockchain by calling function fetchItem()
+        const resultBufferTwo = await eduChain.fetchPersonBufferTwo.call(upc)
+
+        // Verify the result set
+        assert.equal(resultBufferTwo[11], 1, 'Error: Invalid Item State');
+        assert.equal(resultBufferTwo[12], uniID, 'Error: Invalid University ID')
+    })
+
+    // 3rd Test
+    it("Testing smart contract function register() that allows a student to register for course", async() => {
+        const eduChain = await EduChain.deployed()
+        // await eduChain.addUniversity(uniID)
+        personState++;
+        // Declare and Initialize a variable for event
+        var eventEmitted = false
+
+        // Watch the emitted event Applied_Uni()
+        eduChain.Registered(null, (error, event)=> {
+            eventEmitted = true
+        })
+
+        // Mark a person as admitted by calling function admit()
+        let result = await eduChain.register(upc, {from: originStudentID})
+        
+        // Retrieve the just now saved item from blockchain by calling function fetchItem()
+        const resultBufferTwo = await eduChain.fetchPersonBufferTwo.call(upc)
+        
+        // Verify the result set
+        assert.equal(resultBufferTwo[11], personState, 'Error: Invalid Item State');
+
+        // Determine if the event has been emited using 'truffleAssert'
+        truffleAssert.eventEmitted(result, 'Registered');
+        // assert.equal(resultBufferTwo[12], uniID, 'Error: Invalid University ID')
+    }) 
+
+    // 4th test
+    it("Testing smart contract function apply_accommodation() that allows a student to apply for accommodation", async() => {
+        const eduChain = await EduChain.deployed()
+        // await eduChain.addUniversity(uniID)
+        personState++;
+        // Declare and Initialize a variable for event
+        var eventEmitted = false
+
+        // Watch the emitted event Applied_Uni()
+        eduChain.Applied_Accommodation(null, (error, event)=> {
+            eventEmitted = true
+        })
+
+        // Mark a person as admitted by calling function apply_accommodation()
+        let result = await eduChain.apply_accommodation(upc, {from: originStudentID})
+        
+        // Retrieve the just now saved item from blockchain by calling function fetchItem()
+        const resultBufferTwo = await eduChain.fetchPersonBufferTwo.call(upc)
+        
+        // Verify the result set
+        assert.equal(resultBufferTwo[11], personState, 'Error: Invalid Item State');
+
+        // Determine if the event has been emited using 'truffleAssert'
+        truffleAssert.eventEmitted(result, 'Applied_Accommodation');
+        // assert.equal(resultBufferTwo[12], uniID, 'Error: Invalid University ID')
+    })
+    
+    // 5th test
+    it("Testing smart contract function accepted_accommodation() that allows a student to be accepted for accommodation", async() => {
+        const eduChain = await EduChain.deployed()
+        await eduChain.addAccommodation(accommodationID)
+        personState++;
+        // Declare and Initialize a variable for event
+        var eventEmitted = false
+
+        // Watch the emitted event Applied_Uni()
+        eduChain.Accepted(null, (error, event)=> {
+            eventEmitted = true
+        })
+
+        // Mark a person as admitted by calling function admit()
+        var event = await eduChain.accepted_accommodation(upc, {from: originStudentID})
+        truffleAssert.eventEmitted(event, 'Accepted');
+        
+        // Retrieve the just now saved item from blockchain by calling function fetchItem()
+        const resultBufferTwo = await eduChain.fetchPersonBufferTwo.call(upc)
+        
+        // Verify the result set
+        assert.equal(resultBufferTwo[11], personState, 'Error: Invalid Item State');
+
+        // Determine if the event has been emited using 'truffleAssert'
+        assert.equal(resultBufferTwo[13], uniID, 'Error: Invalid Accommodation ID')
+    })
+
+    // 6th test
+    it("Testing smart contract function register() that allows a student to apply for accommodation", async() => {
+        const eduChain = await EduChain.deployed()
+        // await eduChain.addUniversity(uniID)
+        personState++;
+        // Declare and Initialize a variable for event
+        var eventEmitted = false
+
+        // Watch the emitted event Applied_Uni()
+        eduChain.Applied_Nsfas(null, (error, event)=> {
+            eventEmitted = true
+        })
+
+        // Mark a person as admitted by calling function apply_nsfas()
+        let result = await eduChain.apply_nsfas(upc, {from: originStudentID})
+        
+        // Retrieve the just now saved item from blockchain by calling function fetchItem()
+        const resultBufferTwo = await eduChain.fetchPersonBufferTwo.call(upc)
+        
+        // Verify the result set
+        // Determine if the event has been emited using 'truffleAssert'
+        assert.equal(resultBufferTwo[11], personState, 'Error: Invalid Item State');
+        truffleAssert.eventEmitted(result, 'Applied_Nsfas');
+        // assert.equal(resultBufferTwo[12], uniID, 'Error: Invalid University ID')
+    })
+
+    // 7th test
+    it("Testing smart contract function approved_nsfas() that allows a retailer to mark coffee received", async() => {
+        const eduChain = await EduChain.deployed()
+        await eduChain.addNsfas(nsfasID)
+        personState++;
+        // Declare and Initialize a variable for event
+        var eventEmitted = false
+        
+        // Watch the emitted event Received()
+        eduChain.Approved(null, (error, event)=>{
+            eventEmitted = true
+        })
+
+        // Mark an item as Approved by calling function approved_nsfas()
+        var event = await eduChain.approved_nsfas(upc,  {from: nsfasID});
+
+        //Determine if the event has been emitted using `truffleAssert`
+        truffleAssert.eventEmitted(event, 'Approved');
+
+        //Retrieve the just now saved item from blockchain by calling function fetchItem()
+        const resultBufferTwo = await eduChain.fetchItemBufferTwo.call(upc)
+
+        //Verify the result set
+        assert.equal(resultBufferTwo[11], 6, 'Error: Invalid item State');
+        assert.equal(resultBufferTwo[14], nsfasID, "Error: Invalid Nsfas ID.")
+             
+    })
+    
+    // 8th Test
+    it("Testing smart contract function reqBookFund() that allows a student to request for book funds from nsfas", async() => {
+        const eduChain = await EduChain.deployed()
+        personState++;
+        // Declare and initialize a variable for event
+        var eventEmitted = false
+
+        // Watch the emitted event Requested_BookFunds()
+        eduChain.Requested_BookFunds(null, (error, event)=> {
+            eventEmitted = true
+        })
+
+        // Mark a student as requested book funds by calling the function reqBookFund()
+        let result = await eduChain.reqBookFund(upc, bookPrice, {from: originStudentID})
+
+        // Retrieve the just now saved person from blockchain by calling function fetchPerson()
+        const resultBufferTwo = await eduChain.fetchPersonBufferTwo.call(upc)
+
+        // Verify the result set
+        assert.equal(resultBufferTwo[7], bookPrice, "Error: Invalid Book Fund Amount")
+        assert.equal(resultBufferTwo[11], personState, 'Error: Invalid Person State')
+        truffleAssert.eventEmitted(result, 'Requested_BookFunds');
+    })
+
+    // 9th Test
+    it("Testing smart contract function payBooks() that allows nsfas to pay book funds to student", async() => {
+        const eduChain = await EduChain.deployed()
+        personState++;
+        // Declare and initialize a variable for event
+        var eventEmitted = false
+
+        // Watch the emitted event Paid_Books()
+        eduChain.Paid_Books(null, (error, event)=>{
+            eventEmitted = true
+        })
+
+        // Mark a student as Paid_Books by calling function payBooks()
+        let result = await eduChain.payBooks(upc, {from: nsfasID, value: bookPrice})
+
+        // Retrieve the just now saved person from blockchain by calling function fetchPerson()
+        const resultBufferOne = await eduChain.fetchPersonBufferOne.call(upc)
+        const resultBufferTwo = await eduChain.fetchItemBufferTwo.call(upc)
+
+        // Verify the result set
+        assert.equal(resultBufferOne[2], nsfasID, "Error: Invalid Owner.")
+        assert.equal(resultBufferTwo[14], nsfasID, "Error: Invalid Nsfas ID.")
+        assert.equal(resultBufferTwo[11], personState, 'Error: Invalid Person State')
+        truffleAssert.eventEmitted(result, 'Paid_Books');
+    })
+
+    // 10th test
+    it("Testing smart contract function reqMonthlyFund() that allows a student to request for monthly funds from nsfas", async() => {
+        const eduChain = await EduChain.deployed()
+        personState++;
+        // Declare and initialize a variable for event
+        var eventEmitted = false
+
+        // Watch the emitted event Requested_BookFunds()
+        eduChain.Requested_MonthlyFunds(null, (error, event)=> {
+            eventEmitted = true
+        })
+
+        // Mark a student as requested book funds by calling the function reqBookFund()
+        let result = await eduChain.reqMonthlyFund(upc, montlhyPrice, {from: originStudentID})
+
+        // Retrieve the just now saved person from blockchain by calling function fetchPerson()
+        const resultBufferTwo = await eduChain.fetchPersonBufferTwo.call(upc)
+
+        // Verify the result set
+        assert.equal(resultBufferTwo[8], montlhyPrice, "Error: Invalid Monthly Fund Amount")
+        assert.equal(resultBufferTwo[11], personState, 'Error: Invalid Person State')
+        truffleAssert.eventEmitted(result, 'Requested_MonthlyFunds');
+    })
+
+    // 11th Test
+    it("Testing smart contract function payMonthly() that allows nsfas to pay monthly funds to student", async() => {
+        const eduChain = await EduChain.deployed()
+        personState++;
+        // Declare and initialize a variable for event
+        var eventEmitted = false
+
+        // Watch the emitted event Paid_Books()
+        eduChain.Paid_Monthly(null, (error, event)=>{
+            eventEmitted = true
+        })
+
+        // Mark a student as Paid_Books by calling function payBooks()
+        let result = await eduChain.payMonthly(upc, {from: nsfasID, value: monthlyPrice})
+
+        // Retrieve the just now saved person from blockchain by calling function fetchPerson()
+        const resultBufferOne = await eduChain.fetchPersonBufferOne.call(upc)
+        const resultBufferTwo = await eduChain.fetchItemBufferTwo.call(upc)
+
+        // Verify the result set
+        assert.equal(resultBufferOne[2], nsfasID, "Error: Invalid Owner.")
+        assert.equal(resultBufferTwo[14], nsfasID, "Error: Invalid Nsfas ID.")
+        assert.equal(resultBufferTwo[11], personState, 'Error: Invalid Person State')
+        truffleAssert.eventEmitted(result, 'Paid_Monthly');
+    })
+
+    // 12th test
+    it("Testing smart contract function reqRentFund() that allows rental place to request for rent from nsfas", async() => {
+        const eduChain = await EduChain.deployed()
+        personState++;
+        // Declare and initialize a variable for event
+        var eventEmitted = false
+
+        // Watch the emitted event Requested_BookFunds()
+        eduChain.Requested_Rent(null, (error, event)=> {
+            eventEmitted = true
+        })
+
+        // Mark a student as requested book funds by calling the function reqBookFund()
+        let result = await eduChain.reqRentFund(upc, rentPrice, {from: accommodationID})
+
+        // Retrieve the just now saved person from blockchain by calling function fetchPerson()
+        const resultBufferTwo = await eduChain.fetchPersonBufferTwo.call(upc)
+
+        // Verify the result set
+        assert.equal(resultBufferTwo[9], rentPrice, "Error: Invalid Rent Amount")
+        assert.equal(resultBufferTwo[11], personState, 'Error: Invalid Person State')
+        truffleAssert.eventEmitted(result, 'Requested_Rent');
+    })
+
+    // 13th Test
+    it("Testing smart contract function payRent() that allows nsfas to pay monthly funds to student", async() => {
+        const eduChain = await EduChain.deployed()
+        personState++;
+        // Declare and initialize a variable for event
+        var eventEmitted = false
+
+        // Watch the emitted event Paid_Books()
+        eduChain.Paid_Rent(null, (error, event)=>{
+            eventEmitted = true
+        })
+
+        // Mark a student as Paid_Books by calling function payBooks()
+        let result = await eduChain.payRent(upc, {from: nsfasID, value: rentPrice})
+
+        // Retrieve the just now saved person from blockchain by calling function fetchPerson()
+        const resultBufferOne = await eduChain.fetchPersonBufferOne.call(upc)
+        const resultBufferTwo = await eduChain.fetchItemBufferTwo.call(upc)
+
+        // Verify the result set
+        assert.equal(resultBufferOne[2], nsfasID, "Error: Invalid Owner.")
+        assert.equal(resultBufferTwo[14], nsfasID, "Error: Invalid Nsfas ID.")
+        assert.equal(resultBufferTwo[11], personState, 'Error: Invalid Person State')
+        truffleAssert.eventEmitted(result, 'Paid_Rent');
     })
 
 
