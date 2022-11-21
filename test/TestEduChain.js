@@ -8,7 +8,7 @@ contract('EduChain', function(accounts) {
     var sku = 1
     var upc = 1
     const ownerID = accounts[0]
-    const originStudentID = accounts[1]
+    const originStudentID = accounts[0]
     const studentName = "John"
     const studentSurname = "Doe"
     const uniName = "TUT"
@@ -56,11 +56,11 @@ contract('EduChain', function(accounts) {
 
         // Watch the emitted event Applied_Uni()
         eduChain.Applied_Uni(null, (error, event)=> {
-            eventEmitted = true
-        })
+            eventEmitted = true;
+        });
 
         // Mark a person as Applied_Uni by calling function applyUni()
-        let result = await eduChain.applyUni(upc, originStudentID, studentName, studentSurname, uniName, courseName, uniID)
+        let result = await eduChain.applyUni(upc, originStudentID, studentName, studentSurname, courseName, uniName, uniID , {from: originStudentID})
 
         // Retrieve the just now saved person from blockchain by calling function fetchPerson()
         const resultBufferOne = await eduChain.fetchPersonBufferOne.call(upc)
@@ -75,11 +75,15 @@ contract('EduChain', function(accounts) {
         assert.equal(resultBufferOne[3], originStudentID, 'Error: Missing or Invalid originStudentID')
         assert.equal(resultBufferOne[4], studentName, 'Error: Missing or Invalid studentName')
         assert.equal(resultBufferOne[5], studentSurname, 'Error: Missing or Invalid studentSurname')
-        assert.equal(resultBufferTwo[2], personID, 'Error: Invalid personID')
-        assert.equal(resultBufferOne[5], uniName, 'Error: Missing or Invalid uniName')
-        assert.equal(resultBufferOne[6], courseName, 'Error: Missing or Invalid courseName')
-        assert.equal(resultBufferOne[12], uniID, 'Error: Missing or Invalid uniID')
-        assert.equal(resultBufferTwo[11], 0, 'Error: Invalid person State')
+        assert.equal(resultBufferTwo[0], personID, 'Error: Invalid personID')
+        assert.equal(resultBufferTwo[1], uniName, 'Error: Missing or Invalid uniName')
+        assert.equal(resultBufferTwo[2], courseName, 'Error: Missing or Invalid courseName')
+        // assert.equal(resultBufferTwo[3], bookPrice, 'Error: Missing or Invalid courseName')
+        // assert.equal(resultBufferTwo[4], monthlyPrice, 'Error: Missing or Invalid courseName')
+        // assert.equal(resultBufferTwo[5], rentPrice, 'Error: Missing or Invalid courseName')
+        // assert.equal(resultBufferTwo[6], feesPrice, 'Error: Missing or Invalid courseName')
+        assert.equal(resultBufferTwo[8], uniID, 'Error: Missing or Invalid uniID')
+        assert.equal(resultBufferTwo[7], 0, 'Error: Invalid person State')
         assert.equal(eventEmitted, true, 'Invalid event emitted')
         truffleAssert.eventEmitted(result, 'Applied_Uni');
     })
@@ -384,6 +388,55 @@ contract('EduChain', function(accounts) {
 
         // Mark a student as Paid_Books by calling function payBooks()
         let result = await eduChain.payRent(upc, {from: nsfasID, value: rentPrice})
+
+        // Retrieve the just now saved person from blockchain by calling function fetchPerson()
+        const resultBufferOne = await eduChain.fetchPersonBufferOne.call(upc)
+        const resultBufferTwo = await eduChain.fetchItemBufferTwo.call(upc)
+
+        // Verify the result set
+        assert.equal(resultBufferOne[2], nsfasID, "Error: Invalid Owner.")
+        assert.equal(resultBufferTwo[14], nsfasID, "Error: Invalid Nsfas ID.")
+        assert.equal(resultBufferTwo[11], personState, 'Error: Invalid Person State')
+        truffleAssert.eventEmitted(result, 'Paid_Rent');
+    })
+    // 14th test
+    it("Testing smart contract function reqFeesFund() that allows university to request fees from nsfas", async() => {
+        const eduChain = await EduChain.deployed()
+        personState++;
+        // Declare and initialize a variable for event
+        var eventEmitted = false
+
+        // Watch the emitted event Requested_BookFunds()
+        eduChain.Requested_UniFees(null, (error, event)=> {
+            eventEmitted = true
+        })
+
+        // Mark a student as requested book funds by calling the function reqBookFund()
+        let result = await eduChain.reqFeesFund(upc, feesPrice, {from: uniID})
+
+        // Retrieve the just now saved person from blockchain by calling function fetchPerson()
+        const resultBufferTwo = await eduChain.fetchPersonBufferTwo.call(upc)
+
+        // Verify the result set
+        assert.equal(resultBufferTwo[10], feesPrice, "Error: Invalid Rent Amount")
+        assert.equal(resultBufferTwo[11], personState, 'Error: Invalid Person State')
+        truffleAssert.eventEmitted(result, 'Requested_UniFees');
+    })
+
+    // 15th Test
+    it("Testing smart contract function payFees() that allows nsfas to pay fees to university", async() => {
+        const eduChain = await EduChain.deployed()
+        personState++;
+        // Declare and initialize a variable for event
+        var eventEmitted = false
+
+        // Watch the emitted event Paid_Fees()
+        eduChain.Paid_Fees(null, (error, event)=>{
+            eventEmitted = true
+        })
+
+        // Mark a student as Paid_Books by calling function payBooks()
+        let result = await eduChain.payFees(upc, {from: nsfasID, value: feesPrice})
 
         // Retrieve the just now saved person from blockchain by calling function fetchPerson()
         const resultBufferOne = await eduChain.fetchPersonBufferOne.call(upc)

@@ -285,7 +285,7 @@ contract EduChain is
         // Add the new person as part of applied
         persons[_upc].upc = _upc;
         persons[_upc].sku = sku;
-        persons[_upc].ownerID = msg.sender;
+        // persons[_upc].ownerID = msg.sender;
         persons[_upc].ownerID = _originStudentID;
         persons[_upc].originStudentID = _originStudentID;
         persons[_upc].studentName = _studentName;
@@ -572,11 +572,11 @@ contract EduChain is
         public
         view
         returns (
-            uint256 personSKU,
-            uint256 personUPC,
+            // uint256 personSKU,
+            // uint256 personUPC,
             uint256 personID,
-            string memory studentName,
-            string memory studentSurname, // Student Surname
+            // string memory studentName,
+            // string memory studentSurname, // Student Surname
             string memory uniName,
             string memory courseName, // Course Applying for by person
             uint256 bookPrice, // Book Price
@@ -593,11 +593,11 @@ contract EduChain is
         )
     {
         // Assign values to the 15 or 16 parameters
-        personSKU = persons[_upc].sku;
-        personUPC = persons[_upc].upc;
+        // personSKU = persons[_upc].sku;
+        // personUPC = persons[_upc].upc;
         personID = persons[_upc].personID;
-        studentName = persons[_upc].studentName;
-        studentSurname = persons[_upc].studentSurname;
+        // studentName = persons[_upc].studentName;
+        // studentSurname = persons[_upc].studentSurname;
         uniName = persons[_upc].uniName;
         courseName = persons[_upc].courseName;
         bookPrice = persons[_upc].bookPrice;
@@ -610,11 +610,11 @@ contract EduChain is
         nsfasID = persons[_upc].nsfasID;
 
         return (
-            personSKU,
-            personUPC,
+            // personSKU,
+            // personUPC,
             personID,
-            studentName,
-            studentSurname,
+            // studentName,
+            // studentSurname,
             uniName,
             courseName,
             bookPrice,
