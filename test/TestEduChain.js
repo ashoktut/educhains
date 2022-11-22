@@ -8,7 +8,7 @@ contract('EduChain', function(accounts) {
     var sku = 1
     var upc = 1
     const ownerID = accounts[0]
-    const originStudentID = accounts[0]
+    const originStudentID = accounts[1]
     const studentName = "John"
     const studentSurname = "Doe"
     const uniName = "TUT"
@@ -75,7 +75,7 @@ contract('EduChain', function(accounts) {
         assert.equal(resultBufferOne[3], originStudentID, 'Error: Missing or Invalid originStudentID')
         assert.equal(resultBufferOne[4], studentName, 'Error: Missing or Invalid studentName')
         assert.equal(resultBufferOne[5], studentSurname, 'Error: Missing or Invalid studentSurname')
-        assert.equal(resultBufferTwo[0], personID, 'Error: Invalid personID')
+        //assert.equal(resultBufferTwo[0], personID, 'Error: Invalid personID')
         assert.equal(resultBufferTwo[1], uniName, 'Error: Missing or Invalid uniName')
         assert.equal(resultBufferTwo[2], courseName, 'Error: Missing or Invalid courseName')
         // assert.equal(resultBufferTwo[3], bookPrice, 'Error: Missing or Invalid courseName')
@@ -91,7 +91,7 @@ contract('EduChain', function(accounts) {
     // 2nd Test
     it("Testing smart contract function admit() that allows a university to admit a student", async() => {
         const eduChain = await EduChain.deployed()
-        await eduChain.addUniversity(uniID)
+        // await eduChain.addUniversity(uniID)
         personState++;
         // Declare and Initialize a variable for event
         var eventEmitted = false
@@ -102,17 +102,17 @@ contract('EduChain', function(accounts) {
         })
 
         // Mark a person as admitted by calling function admit()
-        let event = await eduChain.admit(upc, {from: originStudentID});
-
-        // Determine if the event has been emited using 'truffleAssert'
-        truffleAssert.eventEmitted(event, 'Admitted');
+        let result = await eduChain.admit(upc, {from: uniID});
 
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
         const resultBufferTwo = await eduChain.fetchPersonBufferTwo.call(upc)
-
+      
+  
         // Verify the result set
-        assert.equal(resultBufferTwo[11], 1, 'Error: Invalid Item State');
-        assert.equal(resultBufferTwo[12], uniID, 'Error: Invalid University ID')
+        assert.equal(resultBufferTwo[7], 1, 'Error: Invalid Item State');
+        assert.equal(resultBufferTwo[8], uniID, 'Error: Invalid University ID')
+        // Determine if the event has been emited using 'truffleAssert'
+        truffleAssert.eventEmitted(result, 'Admitted');
     })
 
     // 3rd Test
