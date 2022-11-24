@@ -94,8 +94,8 @@ contract EduChain is
     event Paid_Rent(uint256 upc);
     event Requested_UniFees(uint256 upc);
     event Paid_Fees(uint256 upc);
-    event Eligible(uint256 upc);
-    event Graduated(uint256 upc);
+    // event Eligible(uint256 upc); ********************************************************* <----------------------Here uncomment it
+    // event Graduated(uint256 upc);
 
     // Define a modifier that verifies the Caller
     modifier verifyCaller(address _address) {
@@ -308,7 +308,7 @@ contract EduChain is
         applied_uni(_upc)
         // call modifier to verify caller of this function
         verifyCaller(persons[_upc].uniID)
-        onlyUniversity
+        // onlyUniversity
         {
             persons[_upc].ownerID = msg.sender;
             persons[_upc].uniID = msg.sender;
@@ -322,7 +322,7 @@ contract EduChain is
         admitted(_upc)
         // call modifier to verify caller of this function
         verifyCaller(persons[_upc].originStudentID)
-        onlyStudent
+        // onlyStudent
         {
             persons[_upc].ownerID = msg.sender;
             persons[_upc].originStudentID = msg.sender;
@@ -350,6 +350,7 @@ contract EduChain is
         applied_accommodation(_upc)
         // call modifier to verify caller of this function
         verifyCaller(persons[_upc].accommodationID)
+        // onlyAccommodation
         {
             persons[_upc].ownerID = msg.sender;
             persons[_upc].accommodationID = msg.sender;
@@ -360,7 +361,7 @@ contract EduChain is
      function apply_nsfas(uint256 _upc)
         public
         // call modifier to check if upc has passed previous process
-        registered(_upc)
+        accepted(_upc)
         // call modifier to verify caller of this function
         verifyCaller(persons[_upc].originStudentID)
         onlyStudent
