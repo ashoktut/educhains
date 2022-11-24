@@ -182,18 +182,18 @@ contract('EduChain', function(accounts) {
             eventEmitted = true
         })
 
-        // Mark a person as admitted by calling function admit()
-        let result = await eduChain.accepted_accommodation(upc, {from: originStudentID})
-        truffleAssert.eventEmitted(result, 'Accepted');
+        // Mark a person as admitted by calling function accepted_accommodation()
+        let result = await eduChain.accepted_accommodation(upc, {from: accommodationID})
         
         // Retrieve the just now saved item from blockchain by calling function fetchItem()
         const resultBufferTwo = await eduChain.fetchPersonBufferTwo.call(upc)
         
         // Verify the result set
         assert.equal(resultBufferTwo[7], personState, 'Error: Invalid Item State');
-
-        // Determine if the event has been emited using 'truffleAssert'
         assert.equal(resultBufferTwo[9], accommodationID, 'Error: Invalid Accommodation ID')
+        
+        // Determine if the event has been emited using 'truffleAssert'
+        truffleAssert.eventEmitted(result, 'Accepted');
     })
 
     // 6th test
