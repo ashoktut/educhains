@@ -27,7 +27,7 @@
 //
  //const fs = require('fs');
  //const mnemonic = fs.readFileSync(".secret").toString().trim();
- const mnemonic = "vault nerve satisfy crane parade glow recycle lava garden error stem fiction";
+ const mnemonic = "radio east obvious muffin inquiry jacket patrol inch strike dawn moon ginger";
 
 module.exports = {
   networks: {

@@ -100,3 +100,5 @@
 [2022/11/26 21:32:16.264] - eth_getBlockByNumber
 [2022/11/26 21:32:16.326] - eth_getBlockTransactionCountByHash
 [2022/11/26 21:32:29.386] - eth_getLogs
+[2022/11/27 01:13:41.145] - eth_unsubscribe
+[2022/11/27 01:13:41.186] - eth_unsubscribe
