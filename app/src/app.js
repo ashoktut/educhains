@@ -6,16 +6,19 @@ App = {
     upc: 0,
     metamaskAccountID: "0x0000000000000000000000000000000000000000",
     ownerID: "0x0000000000000000000000000000000000000000",
-    originFarmerID: "0x0000000000000000000000000000000000000000",
-    originFarmName: null,
-    originFarmInformation: null,
-    originFarmLatitude: null,
-    originFarmLongitude: null,
-    productNotes: null,
-    productPrice: 0,
-    distributorID: "0x0000000000000000000000000000000000000000",
-    retailerID: "0x0000000000000000000000000000000000000000",
-    consumerID: "0x0000000000000000000000000000000000000000",
+    originStudentID: "0x0000000000000000000000000000000000000000",
+    studentName: null,
+    studentSurname: null,
+    courseName: null,
+    uniName: null,
+    bookPrice: 0,
+    monthlyPrice: 0,
+    rentPrice: 0,
+    feesPrice: 0,
+    uniID: "0x0000000000000000000000000000000000000000",
+    accommodationrID: "0x0000000000000000000000000000000000000000",
+    nsfasID: "0x0000000000000000000000000000000000000000",
+    
 
     init: async function () {
         App.readForm();
@@ -27,31 +30,35 @@ App = {
         App.sku = $("#sku").val();
         App.upc = $("#upc").val();
         App.ownerID = $("#ownerID").val();
-        App.originFarmerID = $("#originFarmerID").val();
-        App.originFarmName = $("#originFarmName").val();
-        App.originFarmInformation = $("#originFarmInformation").val();
-        App.originFarmLatitude = $("#originFarmLatitude").val();
-        App.originFarmLongitude = $("#originFarmLongitude").val();
-        App.productNotes = $("#productNotes").val();
-        App.productPrice = $("#productPrice").val();
-        App.distributorID = $("#distributorID").val();
-        App.retailerID = $("#retailerID").val();
-        App.consumerID = $("#consumerID").val();
+        App.originStudentID = $("#originStudentID").val();
+        App.studentName = $("#studentName").val();
+        App.studentSurname = $("#studentSurname").val();
+        App.courseName = $("#courseName").val();
+        App.uniName = $("#uniName").val();
+        App.bookPrice = $("#bookPrice").val();
+        App.monthlyPrice = $("#monthlyPrice").val();
+        App.rentPrice = $("#rentPrice").val();
+        App.feesPrice = $("#feesPrice").val();
+        App.uniID = $("#uniID").val();
+        App.accommodationID = $("#accommodationID").val();
+        App.nsfasID = $("#nsfasID").val();
 
         console.log(
             App.sku,
             App.upc,
-            App.ownerID, 
-            App.originFarmerID, 
-            App.originFarmName, 
-            App.originFarmInformation, 
-            App.originFarmLatitude, 
-            App.originFarmLongitude, 
-            App.productNotes, 
-            App.productPrice, 
-            App.distributorID, 
-            App.retailerID, 
-            App.consumerID
+            App.ownerID,
+            App.originStudentID,
+            App.studentName,
+            App.studentSurname,
+            App.courseName,
+            App.uniName,
+            App.bookPrice,
+            App.monthlyPrice,
+            App.rentPrice,
+            App.feesPrice,
+            App.uniID,
+            App.accommodationID,
+            App.nsfasID
         );
     },
 
@@ -79,7 +86,7 @@ App = {
 
         App.getMetaskAccountID();
 
-        return App.initSupplyChain();
+        return App.initEduChain();
     },
 
     getMetaskAccountID: function () {
@@ -97,19 +104,19 @@ App = {
         })
     },
 
-    initSupplyChain: function () {
+    initEduChain: function () {
         /// Source the truffle compiled smart contracts
-        var jsonSupplyChain='../../build/contracts/SupplyChain.json';
+        var jsonEduChain='../../build/contracts/EduChain.json';
         
         /// JSONfy the smart contracts
-        $.getJSON(jsonSupplyChain, function(data) {
+        $.getJSON(jsonEduChain, function(data) {
             console.log('data',data);
-            var SupplyChainArtifact = data;
-            App.contracts.SupplyChain = TruffleContract(SupplyChainArtifact);
-            App.contracts.SupplyChain.setProvider(App.web3Provider);
+            var EduChainArtifact = data;
+            App.contracts.EduChain = TruffleContract(EduChainArtifact);
+            App.contracts.EduChain.setProvider(App.web3Provider);
             
-            App.fetchItemBufferOne();
-            App.fetchItemBufferTwo();
+            App.fetchPersonBufferOne();
+            App.fetchPesonBufferTwo();
             App.fetchEvents();
 
         });
@@ -131,203 +138,331 @@ App = {
 
         switch(processId) {
             case 1:
-                return await App.harvestItem(event);
+                return await App.applyUni(event);
                 break;
             case 2:
-                return await App.processItem(event);
+                return await App.admit(event);
                 break;
             case 3:
-                return await App.packItem(event);
+                return await App.register(event);
                 break;
             case 4:
-                return await App.sellItem(event);
+                return await App.apply_accommodation(event);
                 break;
             case 5:
-                return await App.buyItem(event);
+                return await App.accepted_accommodation(event);
                 break;
             case 6:
-                return await App.shipItem(event);
+                return await App.apply_nsfas(event);
                 break;
             case 7:
-                return await App.receiveItem(event);
+                return await App.approved_nsfas(event);
                 break;
             case 8:
-                return await App.purchaseItem(event);
+                return await App.reqBookFund(event);
                 break;
             case 9:
-                return await App.fetchItemBufferOne(event);
+                return await App.payBooks(event);
                 break;
             case 10:
-                return await App.fetchItemBufferTwo(event);
+                    return await App.reqMonthlyFund(event);
+                    break;  
+            case 11:
+                return await App.payMonthly(event);
+                break;
+            case 12:
+                return await App.reqRentFund(event);
+                break;   
+            case 13:
+                return await App.payRent(event);
+                break; 
+            case 14:
+                return await App.reqFeesFund(event);
+                break;  
+            case 15:
+                return await App.payFees(event);
+                break;              
+            case 16:
+                return await App.fetchPersonBufferOne(event);
+                break;
+            case 17:
+                return await App.fetchPersonBufferTwo(event);
                 break;
             }
     },
 
-    harvestItem: function(event) {
+    applyUni: function(event) {
         event.preventDefault();
         var processId = parseInt($(event.target).data('id'));
 
-        App.contracts.SupplyChain.deployed().then(function(instance) {
-            return instance.harvestItem(
+        App.contracts.EduChain.deployed().then(function(instance) {
+            return instance.applyUni(
                 App.upc, 
                 App.metamaskAccountID, 
-                App.originFarmName, 
-                App.originFarmInformation, 
-                App.originFarmLatitude, 
-                App.originFarmLongitude, 
-                App.productNotes,
+                App.studentName, 
+                App.studentSurname, 
+                App.courseName, 
+                App.uniName, 
                 {from : App.metamaskAccountID}
             );
         }).then(function(result) {
             $("#ftc-item").text(result);
-            console.log('harvestItem',result);
+            console.log('applyUni',result);
         }).catch(function(err) {
             console.log(err.message);
         });
     },
 
-    processItem: function (event) {
+    admit: function (event) {
         event.preventDefault();
         var processId = parseInt($(event.target).data('id'));
 
-        App.contracts.SupplyChain.deployed().then(function(instance) {
-            return instance.processItem(App.upc, {from: App.metamaskAccountID});
+        App.contracts.EduChain.deployed().then(function(instance) {
+            return instance.admit(App.upc, {from: App.metamaskAccountID});
         }).then(function(result) {
             $("#ftc-item").text(result);
-            console.log('processItem',result);
+            console.log('admit',result);
         }).catch(function(err) {
             console.log(err.message);
         });
     },
     
-    packItem: function (event) {
+    register: function (event) {
         event.preventDefault();
         var processId = parseInt($(event.target).data('id'));
 
-        App.contracts.SupplyChain.deployed().then(function(instance) {
-            return instance.packItem(App.upc, {from: App.metamaskAccountID});
+        App.contracts.EduChain.deployed().then(function(instance) {
+            return instance.register(App.upc, {from: App.metamaskAccountID});
         }).then(function(result) {
             $("#ftc-item").text(result);
-            console.log('packItem',result);
+            console.log('register',result);
         }).catch(function(err) {
             console.log(err.message);
         });
     },
 
-    sellItem: function (event) {
+    apply_accommodation: function (event) {
         event.preventDefault();
         var processId = parseInt($(event.target).data('id'));
 
-        App.contracts.SupplyChain.deployed().then(function(instance) {
-            const productPrice = web3.toWei("0.01", "ether");
-            console.log('productPrice',productPrice);
-            return instance.sellItem(App.upc, App.productPrice, {from: App.metamaskAccountID});
+        App.contracts.EduChain.deployed().then(function(instance) {
+            return instance.apply_accommodation(App.upc, {from: App.metamaskAccountID});
         }).then(function(result) {
             $("#ftc-item").text(result);
-            console.log('sellItem',result);
+            console.log('apply_accommodation',result);
         }).catch(function(err) {
             console.log(err.message);
         });
     },
 
-    buyItem: function (event) {
+    accepted_accommodation: function (event) {
         event.preventDefault();
         var processId = parseInt($(event.target).data('id'));
 
-        App.contracts.SupplyChain.deployed().then(function(instance) {
+        App.contracts.EduChain.deployed().then(function(instance) {
+            return instance.accepted_accommodation(App.upc, {from: App.metamaskAccountID});
+        }).then(function(result) {
+            $("#ftc-item").text(result);
+            console.log('accepted_accommodation',result);
+        }).catch(function(err) {
+            console.log(err.message);
+        });
+    },
+    
+    apply_nsfas: function (event) {
+        event.preventDefault();
+        var processId = parseInt($(event.target).data('id'));
+
+        App.contracts.EduChain.deployed().then(function(instance) {
+            return instance.apply_nsfas(App.upc, {from: App.metamaskAccountID});
+        }).then(function(result) {
+            $("#ftc-item").text(result);
+            console.log('apply_nsfas',result);
+        }).catch(function(err) {
+            console.log(err.message);
+        });
+    },
+
+    approved_nsfas: function (event) {
+        event.preventDefault();
+        var processId = parseInt($(event.target).data('id'));
+
+        App.contracts.EduChain.deployed().then(function(instance) {
+            return instance.approved_nsfas(App.upc, {from: App.metamaskAccountID});
+        }).then(function(result) {
+            $("#ftc-item").text(result);
+            console.log('approved_nsfas',result);
+        }).catch(function(err) {
+            console.log(err.message);
+        });
+    },
+
+
+    reqBookFund: function (event) {
+        event.preventDefault();
+        var processId = parseInt($(event.target).data('id'));
+
+        App.contracts.EduChain.deployed().then(function(instance) {
+            const bookPrice = web3.toWei("0.01", "ether");
+            console.log('bookPrice',bookPrice);
+            return instance.reqBookFund(App.upc, App.bookPrice, {from: App.metamaskAccountID});
+        }).then(function(result) {
+            $("#ftc-item").text(result);
+            console.log('reqBookFund',result);
+        }).catch(function(err) {
+            console.log(err.message);
+        });
+    },
+
+    payBooks: function (event) {
+        event.preventDefault();
+        var processId = parseInt($(event.target).data('id'));
+
+        App.contracts.EduChain.deployed().then(function(instance) {
             const walletValue = web3.toWei("0.01", "ether");
-            return instance.buyItem(App.upc, {from: App.metamaskAccountID, value: walletValue});
+            return instance.payBooks(App.upc, {from: App.metamaskAccountID, value: walletValue});
         }).then(function(result) {
             $("#ftc-item").text(result);
-            console.log('buyItem',result);
+            console.log('payBooks',result);
         }).catch(function(err) {
             console.log(err.message);
         });
     },
 
-    shipItem: function (event) {
+    reqMonthlyFund: function (event) {
         event.preventDefault();
         var processId = parseInt($(event.target).data('id'));
 
-        App.contracts.SupplyChain.deployed().then(function(instance) {
-            return instance.shipItem(App.upc, {from: App.metamaskAccountID});
+        App.contracts.EduChain.deployed().then(function(instance) {
+            const monthlyPrice = web3.toWei("0.01", "ether");
+            console.log('monthlyPrice',monthlyPrice);
+            return instance.reqMonthlyFund(App.upc, App.monthlyPrice, {from: App.metamaskAccountID});
         }).then(function(result) {
             $("#ftc-item").text(result);
-            console.log('shipItem',result);
+            console.log('reqMonthlyFund',result);
         }).catch(function(err) {
             console.log(err.message);
         });
-    },
+    },   
 
-    receiveItem: function (event) {
+    payMonthly: function (event) {
         event.preventDefault();
         var processId = parseInt($(event.target).data('id'));
 
-        App.contracts.SupplyChain.deployed().then(function(instance) {
-            return instance.receiveItem(App.upc, {from: App.metamaskAccountID});
+        App.contracts.EduChain.deployed().then(function(instance) {
+            const walletValue = web3.toWei("0.01", "ether");
+            return instance.payMonthly(App.upc, {from: App.metamaskAccountID, value: walletValue});
         }).then(function(result) {
             $("#ftc-item").text(result);
-            console.log('receiveItem',result);
+            console.log('payMonthly',result);
         }).catch(function(err) {
             console.log(err.message);
         });
     },
 
-    purchaseItem: function (event) {
+    reqRentFund: function (event) {
         event.preventDefault();
         var processId = parseInt($(event.target).data('id'));
 
-        App.contracts.SupplyChain.deployed().then(function(instance) {
-            return instance.purchaseItem(App.upc, {from: App.metamaskAccountID});
+        App.contracts.EduChain.deployed().then(function(instance) {
+            const rentPrice = web3.toWei("0.01", "ether");
+            console.log('rentPrice',rentPrice);
+            return instance.reqRentFund(App.upc, App.rentPrice, {from: App.metamaskAccountID});
         }).then(function(result) {
             $("#ftc-item").text(result);
-            console.log('purchaseItem',result);
+            console.log('reqRentFund',result);
+        }).catch(function(err) {
+            console.log(err.message);
+        });
+    },
+    
+    payRent: function (event) {
+        event.preventDefault();
+        var processId = parseInt($(event.target).data('id'));
+
+        App.contracts.EduChain.deployed().then(function(instance) {
+            const walletValue = web3.toWei("0.01", "ether");
+            return instance.payRent(App.upc, {from: App.metamaskAccountID, value: walletValue});
+        }).then(function(result) {
+            $("#ftc-item").text(result);
+            console.log('payRent',result);
         }).catch(function(err) {
             console.log(err.message);
         });
     },
 
-    fetchItemBufferOne: function () {
+    reqFeesFund: function (event) {
+        event.preventDefault();
+        var processId = parseInt($(event.target).data('id'));
+
+        App.contracts.EduChain.deployed().then(function(instance) {
+            const feesPrice = web3.toWei("0.01", "ether");
+            console.log('feesPrice',feesPrice);
+            return instance.reqFeesFund(App.upc, App.feesPrice, {from: App.metamaskAccountID});
+        }).then(function(result) {
+            $("#ftc-item").text(result);
+            console.log('reqFeesFund',result);
+        }).catch(function(err) {
+            console.log(err.message);
+        });
+    },
+    
+    payFees: function (event) {
+        event.preventDefault();
+        var processId = parseInt($(event.target).data('id'));
+
+        App.contracts.EduChain.deployed().then(function(instance) {
+            const walletValue = web3.toWei("0.01", "ether");
+            return instance.payFees(App.upc, {from: App.metamaskAccountID, value: walletValue});
+        }).then(function(result) {
+            $("#ftc-item").text(result);
+            console.log('payFees',result);
+        }).catch(function(err) {
+            console.log(err.message);
+        });
+    },
+
+    fetchPersonBufferOne: function () {
     ///   event.preventDefault();
     ///    var processId = parseInt($(event.target).data('id'));
         App.upc = $('#upc').val();
         console.log('upc',App.upc);
 
-        App.contracts.SupplyChain.deployed().then(function(instance) {
-          return instance.fetchItemBufferOne(App.upc);
+        App.contracts.EduChain.deployed().then(function(instance) {
+          return instance.fetchPersonBufferOne(App.upc);
         }).then(function(result) {
           $("#ftc-item").text(result);
-          console.log('fetchItemBufferOne', result);
+          console.log('fetchPersonBufferOne', result);
         }).catch(function(err) {
           console.log(err.message);
         });
     },
 
-    fetchItemBufferTwo: function () {
+    fetchPersonBufferTwo: function () {
     ///    event.preventDefault();
     ///    var processId = parseInt($(event.target).data('id'));
                         
-        App.contracts.SupplyChain.deployed().then(function(instance) {
-          return instance.fetchItemBufferTwo.call(App.upc);
+        App.contracts.EduChain.deployed().then(function(instance) {
+          return instance.fetchPersonBufferTwo.call(App.upc);
         }).then(function(result) {
           $("#ftc-item").text(result);
-          console.log('fetchItemBufferTwo', result);
+          console.log('fetchPersonBufferTwo', result);
         }).catch(function(err) {
           console.log(err.message);
         });
     },
 
     fetchEvents: function () {
-        if (typeof App.contracts.SupplyChain.currentProvider.sendAsync !== "function") {
-            App.contracts.SupplyChain.currentProvider.sendAsync = function () {
-                return App.contracts.SupplyChain.currentProvider.send.apply(
-                App.contracts.SupplyChain.currentProvider,
+        if (typeof App.contracts.EduChain.currentProvider.sendAsync !== "function") {
+            App.contracts.EduChain.currentProvider.sendAsync = function () {
+                return App.contracts.EduChain.currentProvider.send.apply(
+                App.contracts.EduChain.currentProvider,
                     arguments
               );
             };
         }
 
-        App.contracts.SupplyChain.deployed().then(function(instance) {
+        App.contracts.EduChain.deployed().then(function(instance) {
         var events = instance.allEvents(function(err, log){
           if (!err)
             $("#ftc-events").append('<li>' + log.event + ' - ' + log.transactionHash + '</li>');

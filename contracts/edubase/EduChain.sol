@@ -69,7 +69,7 @@ contract EduChain is
         uint256 monthlyPrice; // Monthly Price
         uint256 rentPrice; // Accommodation Price
         uint256 feesPrice; // University Fees Price
-        uint256 passRate; // Pass rate of the student
+        // uint256 passRate; // Pass rate of the student
         State personState; // Person State as represented in the enum above
         // address studentID; // Metamask-Ethereum address of the student
         address uniID; // Metamask-Ethereum address of the University
@@ -351,7 +351,7 @@ contract EduChain is
         verifyCaller(persons[_upc].accommodationID)
         // onlyAccommodation
         {
-            persons[_upc].ownerID = msg.sender;
+            persons[_upc].accommodationID = msg.sender;
             persons[_upc].accommodationID = msg.sender;
             persons[_upc].personState = State.Accepted;
             emit Accepted(_upc);
@@ -363,7 +363,7 @@ contract EduChain is
         accepted(_upc)
         // call modifier to verify caller of this function
         verifyCaller(persons[_upc].originStudentID)
-        onlyStudent
+        // onlyStudent
         {
             persons[_upc].ownerID = msg.sender;
             persons[_upc].originStudentID = msg.sender;
