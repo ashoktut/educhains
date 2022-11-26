@@ -1,37 +1,128 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>MetaCoin | Truffle Webpack Demo w/ Frontend</title>
-  </head>
-  <style>
-    input {
-      display: block;
-      margin-bottom: 12px;
-    }
-  </style>
-  <body>
-    <h1>MetaCoin — Example Truffle Dapp</h1>
-    <p>You have <strong class="balance">loading...</strong> META</p>
+<html lang="en">
 
-    <h1>Send MetaCoin</h1>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduChain</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
 
-    <label for="amount">Amount:</label>
-    <input type="text" id="amount" placeholder="e.g. 95" />
+<body>
+    <div class="container">
+        <h1 style="text-align: center;">EduChain</h1>
+        <hr>
+        <p style="text-align: center;">Track Student's Process & Disburse Funds</p>
+    </div>
 
-    <label for="receiver">To address:</label>
-    <input
-      type="text"
-      id="receiver"
-      placeholder="e.g. 0x93e66d9baea28c17d9fc393b53e3fbdd76899dae"
-    />
+    <div id="ftc-applyUni">
+        <h2>Student Overview</h2>
+        <div class="form-group">
+            SKU Student Num
+            <br>
+            <input class="input-field" type="number" id="sku" name="sku" value=1><br>
+            UPC SA ID Num
+            <br>
+            <input type="number" id="upc" name="upc" value=1><br>
+            Current Owner ID
+            <br>
+            <input type="text" id="ownerID" name="ownerID" value="0xDD91f1f872910853e8C384B8A050e7ff544B6a35" size="50"><br>
+            <div class=button-div>
+                <button class="btn-fetchOne" id="button" type="button" data-id="16">Fetch Student Info</button>
+                <button class="btn-fetchTwo" id="button" type="button" data-id="17">Fetch Process Info</button>
+            </div>
+        </div>
+        <div class=form-break></div>
+        <h2>Student Details</h2>
+        <div class="form-group">
+            Student ID
+            <br>
+            <input type="text" id="originStudentID" name="originStudentID" value="0x371396c129cD2Fc226069348835D51c9C3e46988"
+                size="50"><br>
+            Student Name
+            <br>
+            <input type="text" id="studentName" name="studentName" value="Laura"><br>
+            Student Surname
+            <br>
+            <input type="text" id="studentSurname" name="studentSurname" value="Ndlovu"><br>
+            Course Name
+            <br>
+            <input type="text" id="courseName" name="courseName" value="Blockchain"><br>
+            Farm Latitude
+            <br>
+            <input type="text" id="originFarmLatitude" name="originFarmLatitude" value="-38.239770"><br>
+            <!-- Farm Longitude
+            <br>
+            <input type="text" id="originFarmLongitude" name="originFarmLongitude" value="144.341490"><br> -->
+            <br>
+            <button class="btn-applyUni" id="button" type="button" data-id="1">Apply Uni</button>
+            <button class="btn-register" id="button" type="button" data-id="3">Register</button>
+            <button class="btn-accommodation" id="button" type="button" data-id="4">Apply Accommodation</button>
+            <button class="btn-nsfas" id="button" type="button" data-id="6">Apply Nsfas</button>
+            <button class="btn-book" id="button" type="button" data-id="8">Get Book Funds</button>
+            <button class="btn-monthly" id="button" type="button" data-id="10">Get Monthly Funds</button>
+            
+        </div>
+        <div class=form-break></div>
+        <h2>Process Details</h2>
+        <div class="form-group">
+            Book Price
+            <br>
+            <input type="number" id="bookPrice" name="bookPrice" value=1>ETH<br>
+            Monthly Price
+            <br>
+            <input type="number" id="monthlyPrice" name="monthlyPrice" value=1>ETH<br>
+            Rent Price
+            <br>
+            <input type="number" id="rentPrice" name="rentPrice" value=1>ETH<br>
+            Fees Price
+            <br>
+            <input type="number" id="feesPrice" name="feesPrice" value=1>ETH<br>
+            
+            University ID
+            <br>
+            <input type="text" id="universityID" name="universityID" value="0xC5d6e8A58b7Af739Cf1eD78A02C9F100212571E9"
+                size="50">
+            <br>
+            Accommodation ID
+            <br>
+            <input type="text" id="accommodationID" name="accommodationID" value="0x5b9D5ffE9745a1FaaA2A260666abEed54a83A53f"
+                size="50"><br>
+            Nsfas ID
+            <br>
+            <input type="text" id="nsfasID" name="nsfasID" value="0xfA8cBEcECE7fFC95d47fFA2d22f9998838C24034"
+                size="50"><br>
+            <br>
+            <button class="btn-admit" id="button" type="button" data-id="2">Admit Student</button>
+            <button class="btn-accept" id="button" type="button" data-id="5">Accept Accommodation</button>
+            <button class="btn-approve" id="button" type="button" data-id="7">Approve Funding</button>
+            <button class="btn-payBooks" id="button" type="button" data-id="9">Pay Books</button>
+            <button class="btn-payMonthly" id="button" type="button" data-id="11">Pay Monthly</button>
+            <button class="btn-getRent" id="button" type="button" data-id="12">Get Rent</button>
+            <button class="btn-payRent" id="button" type="button" data-id="13">Pay Rent</button>
+            <button class="btn-getFees" id="button" type="button" data-id="14">Get Fees</button>
+            <button class="btn-payFees" id="button" type="button" data-id="15">Pay Fees</button>
+        </div>
+        <div class=form-break></div>
+        <hr>
+    </div>
 
-    <button onclick="App.sendCoin()">Send MetaCoin</button>
+    <h2>Transaction History<span id="ftc-history"></span></h2>
+    <div>
+        <ul id="ftc-events">
+            <!-- Events will appear here from app.js -->
+        </ul>
+        <br>
+        <hr>
+    </div>
 
-    <p id="status"></p>
-    <p>
-      <strong>Hint:</strong> open the browser developer console to view any
-      errors and warnings.
-    </p>
-    <script src="index.js"></script>
-  </body>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="js/web3.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/truffle-contract@latest/dist/truffle-contract.js"></script> -->
+    <script src="js/truffle-contract.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
 </html>
