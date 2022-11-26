@@ -170,7 +170,7 @@ contract('EduChain', function(accounts) {
     })
     
     // 5th test
-    it("Testing smart contract function accepted_accommodation() that allows a student to be accepted for accommodation", async() => {
+    it("Testing smart contract function accepted_accommodation() that allows Accommodation to accept a Student", async() => {
         const eduChain = await EduChain.deployed()
         // await eduChain.addAccommodation(accommodationID)
         personState++;
@@ -197,7 +197,7 @@ contract('EduChain', function(accounts) {
     })
 
     // 6th test
-    it("Testing smart contract function register() that allows a student to apply for accommodation", async() => {
+    it("Testing smart contract function register() that allows a student to apply for NSFAS FUNDING", async() => {
         const eduChain = await EduChain.deployed()
         // await eduChain.addUniversity(uniID)
         personState++;
@@ -223,9 +223,9 @@ contract('EduChain', function(accounts) {
     })
 
     // 7th test
-    it("Testing smart contract function approved_nsfas() that allows a retailer to mark coffee received", async() => {
+    it("Testing smart contract function approved_nsfas() that allows NSFAS to Approve a Student for Funding ", async() => {
         const eduChain = await EduChain.deployed()
-        await eduChain.addNsfas(nsfasID)
+        // await eduChain.addNsfas(nsfasID)
         personState++;
         // Declare and Initialize a variable for event
         var eventEmitted = false
@@ -235,19 +235,19 @@ contract('EduChain', function(accounts) {
             eventEmitted = true
         })
 
-        // Mark an item as Approved by calling function approved_nsfas()
+        // Mark a student as Approved by calling function approved_nsfas()
         var event = await eduChain.approved_nsfas(upc,  {from: nsfasID});
 
-        //Determine if the event has been emitted using `truffleAssert`
-        truffleAssert.eventEmitted(event, 'Approved');
-
+        
         //Retrieve the just now saved item from blockchain by calling function fetchItem()
         const resultBufferTwo = await eduChain.fetchItemBufferTwo.call(upc)
-
+        
         //Verify the result set
-        assert.equal(resultBufferTwo[7], 6, 'Error: Invalid item State');
-        assert.equal(resultBufferTwo[14], nsfasID, "Error: Invalid Nsfas ID.")
-             
+        assert.equal(resultBufferTwo[7], personState, 'Error: Invalid item State');
+        assert.equal(resultBufferTwo[10], nsfasID, "Error: Invalid Nsfas ID.")
+        
+        //Determine if the event has been emitted using `truffleAssert`
+        truffleAssert.eventEmitted(event, 'Approved');
     })
     
     // 8th Test
@@ -269,7 +269,7 @@ contract('EduChain', function(accounts) {
         const resultBufferTwo = await eduChain.fetchPersonBufferTwo.call(upc)
 
         // Verify the result set
-        assert.equal(resultBufferTwo[7], bookPrice, "Error: Invalid Book Fund Amount")
+        assert.equal(resultBufferTwo[3], bookPrice, "Error: Invalid Book Fund Amount")
         assert.equal(resultBufferTwo[7], personState, 'Error: Invalid Person State')
         truffleAssert.eventEmitted(result, 'Requested_BookFunds');
     })
@@ -295,7 +295,7 @@ contract('EduChain', function(accounts) {
 
         // Verify the result set
         assert.equal(resultBufferOne[2], nsfasID, "Error: Invalid Owner.")
-        assert.equal(resultBufferTwo[14], nsfasID, "Error: Invalid Nsfas ID.")
+        assert.equal(resultBufferTwo[10], nsfasID, "Error: Invalid Nsfas ID.")
         assert.equal(resultBufferTwo[7], personState, 'Error: Invalid Person State')
         truffleAssert.eventEmitted(result, 'Paid_Books');
     })
@@ -319,7 +319,7 @@ contract('EduChain', function(accounts) {
         const resultBufferTwo = await eduChain.fetchPersonBufferTwo.call(upc)
 
         // Verify the result set
-        assert.equal(resultBufferTwo[8], montlhyPrice, "Error: Invalid Monthly Fund Amount")
+        assert.equal(resultBufferTwo[4], montlhyPrice, "Error: Invalid Monthly Fund Amount")
         assert.equal(resultBufferTwo[7], personState, 'Error: Invalid Person State')
         truffleAssert.eventEmitted(result, 'Requested_MonthlyFunds');
     })
@@ -344,8 +344,8 @@ contract('EduChain', function(accounts) {
         const resultBufferTwo = await eduChain.fetchItemBufferTwo.call(upc)
 
         // Verify the result set
-        assert.equal(resultBufferOne[2], nsfasID, "Error: Invalid Owner.")
-        assert.equal(resultBufferTwo[14], nsfasID, "Error: Invalid Nsfas ID.")
+        assert.equal(resultBufferOne[2], ownerID, "Error: Invalid Owner.")
+        assert.equal(resultBufferTwo[10], nsfasID, "Error: Invalid Nsfas ID.")
         assert.equal(resultBufferTwo[7], personState, 'Error: Invalid Person State')
         truffleAssert.eventEmitted(result, 'Paid_Monthly');
     })
@@ -369,7 +369,7 @@ contract('EduChain', function(accounts) {
         const resultBufferTwo = await eduChain.fetchPersonBufferTwo.call(upc)
 
         // Verify the result set
-        assert.equal(resultBufferTwo[9], rentPrice, "Error: Invalid Rent Amount")
+        assert.equal(resultBufferTwo[5], rentPrice, "Error: Invalid Rent Amount")
         assert.equal(resultBufferTwo[7], personState, 'Error: Invalid Person State')
         truffleAssert.eventEmitted(result, 'Requested_Rent');
     })
@@ -394,8 +394,8 @@ contract('EduChain', function(accounts) {
         const resultBufferTwo = await eduChain.fetchItemBufferTwo.call(upc)
 
         // Verify the result set
-        assert.equal(resultBufferOne[2], nsfasID, "Error: Invalid Owner.")
-        assert.equal(resultBufferTwo[14], nsfasID, "Error: Invalid Nsfas ID.")
+        assert.equal(resultBufferOne[2], nsfasID, "Error: Invalid Owner.")///////////////////////////////////////////////////////////////////////////////
+        assert.equal(resultBufferTwo[10], nsfasID, "Error: Invalid Nsfas ID.")
         assert.equal(resultBufferTwo[7], personState, 'Error: Invalid Person State')
         truffleAssert.eventEmitted(result, 'Paid_Rent');
     })
@@ -418,7 +418,7 @@ contract('EduChain', function(accounts) {
         const resultBufferTwo = await eduChain.fetchPersonBufferTwo.call(upc)
 
         // Verify the result set
-        assert.equal(resultBufferTwo[10], feesPrice, "Error: Invalid Rent Amount")
+        assert.equal(resultBufferTwo[6], feesPrice, "Error: Invalid Rent Amount")
         assert.equal(resultBufferTwo[7], personState, 'Error: Invalid Person State')
         truffleAssert.eventEmitted(result, 'Requested_UniFees');
     })
@@ -444,7 +444,7 @@ contract('EduChain', function(accounts) {
 
         // Verify the result set
         assert.equal(resultBufferOne[2], nsfasID, "Error: Invalid Owner.")
-        assert.equal(resultBufferTwo[14], nsfasID, "Error: Invalid Nsfas ID.")
+        assert.equal(resultBufferTwo[10], nsfasID, "Error: Invalid Nsfas ID.")
         assert.equal(resultBufferTwo[7], personState, 'Error: Invalid Person State')
         truffleAssert.eventEmitted(result, 'Paid_Rent');
     })

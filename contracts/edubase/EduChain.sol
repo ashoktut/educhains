@@ -29,7 +29,7 @@ contract EduChain is
     mapping(uint256 => Person) persons;
 
     // Define a public mapping 'personsHistory' that maps the UPC to an array of TxHash,
-    // that track its journey through the supply chain -- to be sent from DApp.
+    // that track its journey through the educhain -- to be sent from DApp.
     mapping(uint256 => string[]) personsHistory;
 
     // Define enum 'State' with the following values:
@@ -48,9 +48,8 @@ contract EduChain is
         Requested_Rent, // 11
         Paid_Rent, // 12
         Requested_UniFees, // 13
-        Paid_Fees, // 14
-        Eligible, // 15
-        Graduated // 16
+        Paid_Fees // 14
+
     }
 
     State constant defaultState = State.Applied_Uni;
@@ -103,7 +102,7 @@ contract EduChain is
         _;
     }
 
-    // Define a modifier that checks if the paid amount is sufficient to cover the price
+    // Define a modifier that checks if the paid amount is sufficient to cover the books price
     modifier paidEnoughBook(uint256 _bookPrice) {
         require(msg.value >= _bookPrice);
         _;
@@ -249,17 +248,17 @@ contract EduChain is
         _;
     }
 
-    // Define a modifier that checks if a person.state of a upc has applied
-    modifier eligible(uint256 _upc) {
-        require(persons[_upc].personState == State.Eligible, "Person is not eligible for further funding by nsfas");
-        _;
-    }
+    // // Define a modifier that checks if a person.state of a upc has applied
+    // modifier eligible(uint256 _upc) {
+    //     require(persons[_upc].personState == State.Eligible, "Person is not eligible for further funding by nsfas");
+    //     _;
+    // }
 
-    // Define a modifier that checks if a person.state of a upc has applied
-    modifier graduated(uint256 _upc) {
-        require(persons[_upc].personState == State.Graduated, "Person has not applied");
-        _;
-    }
+    // // Define a modifier that checks if a person.state of a upc has applied
+    // modifier graduated(uint256 _upc) {
+    //     require(persons[_upc].personState == State.Graduated, "Person has not applied");
+    //     _;
+    // }
 
     // In the constructor set 'owner' to the address that instantiated the contract
     // and set 'sku' to 1
@@ -270,7 +269,7 @@ contract EduChain is
         upc = 1;
     }
 
-    // Define a function 'applyUni' that allows a person to mark a student as 'Applied_Uni'
+    // Define a function 'applyUni' that mark a student as 'Applied_Uni'
     function applyUni(
         uint256 _upc,
         address _originStudentID,
