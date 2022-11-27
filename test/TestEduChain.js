@@ -9,8 +9,8 @@ contract('EduChain', function(accounts) {
     var upc = 1
     const ownerID = accounts[0]
     const originStudentID = accounts[1]
-    const studentName = "John"
-    const studentSurname = "Doe"
+    const studentName = "Laura"
+    const studentSurname = "Ndlovu"
     const uniName = "TUT"
     const courseName = "Blockchain" // Course Applying for by person
     var personID = sku + upc

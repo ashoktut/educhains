@@ -27,8 +27,8 @@
 //
  //const fs = require('fs');
  //const mnemonic = fs.readFileSync(".secret").toString().trim();
- const mnemonic = "radio east obvious muffin inquiry jacket patrol inch strike dawn moon ginger";
-
+ const mnemonic = "vault nerve satisfy crane parade glow recycle lava garden error stem fiction";
+ // const mnemonic = "radio east obvious muffin inquiry jacket patrol inch strike dawn moon ginger"; Ganache Mnemonic
 module.exports = {
   networks: {
     development: {
