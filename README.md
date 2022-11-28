@@ -1,6 +1,6 @@
 # EduChain Tracking & data auditing
 
-This repository contains an Ethereum DApp that demonstrates a Supply Chain flow between a Seller and Buyer. The user story is similar to any commonly used supply chain process. A Seller can add items to the inventory system stored in the blockchain. A Buyer can purchase such items from the inventory system. Additionally a Seller can mark an item as Shipped, and similarly a Buyer can mark an item as Received.
+This repository contains an Ethereum DApp that demonstrates a Chain flow between a Student and Associated Entities related to the disbursement of funds to cover student expenses such as monthly allowance and book allowance, university fees, accommodation fees.
 
 The DApp User Interface when running should look like...
 
@@ -50,7 +50,6 @@ The DApp User Interface when running should look like...
 
 ![uml diagram](images/diagrams/fcdcd.png)
 
-
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
@@ -65,7 +64,7 @@ Give examples (to be clarified)
 
 ### Installing
 
-> The starter code is written for **Solidity v0.8.0**. At the time of writing, the current Truffle v5 comes with Solidity v0.5 that requires function *mutability* and *visibility* to be specified (please refer to Solidity [documentation](https://docs.soliditylang.org/en/v0.5.0/050-breaking-changes.html) for more details). To use this starter code, please run `npm i -g truffle` to install Truffle with Solidity v0.8.0. 
+> The starter code is written for **Solidity v0.8.0**. At the time of writing, the current Truffle v5 comes with Solidity v0.5 that requires function *mutability* and *visibility* to be specified (please refer to Solidity [documentation](https://docs.soliditylang.org/en/v0.5.0/050-breaking-changes.html) for more details). To use this starter code, please run `npm i -g truffle` to install Truffle with Solidity v0.8.0.
 
 A step by step series of examples that tell you have to get a development env running
 
@@ -144,6 +143,10 @@ https://rinkeby.etherscan.io/address/0xB38B65169e77cD9A8dc6b64B69A73c114512c003
 
 * [Ethereum](https://www.ethereum.org/) - Ethereum is a decentralized platform that runs smart contracts
 * [Truffle Framework](http://truffleframework.com/) - Truffle is the most popular development framework for Ethereum with a mission to make your life a whole lot easier.
+* [Infura API](https://www.infura.io/) - The world's most powerful suite of high availability blockchain APIs and developer tools
+* [Etherscan](https://etherscan.io/) - Tracks transactions on a public test network of Ethereum
+* [Ganache](https://trufflesuite.com/ganache/) - Quickly fire up a personal Ethereum blockchain which you can use to run tests, execute commands, and inspect state while controlling how the chain operates.
+* [Metamask](https://metamask.io/) - A crypto wallet & gateway to blockchain apps for Buy, store, send and swap tokens
 
 ## Versions Used
 
