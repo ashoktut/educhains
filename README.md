@@ -125,7 +125,7 @@ All tests should pass.
 
 ![truffle test](images/truffle_test.png)
 
-In a separate terminal window, launch the DApp:
+In a separate terminal window, launch the DApp (Frontend):
 
 ```
 npm run dev
@@ -138,6 +138,14 @@ https://rinkeby.etherscan.io/address/0xB38B65169e77cD9A8dc6b64B69A73c114512c003
 ```
 
 ![Etherscan Proof](images/etherscan.png)
+
+## Etherscan Proof for transactions on Goerli Network
+
+```
+https://goerli.etherscan.io/address/0xb38b65169e77cd9a8dc6b64b69a73c114512c003
+```
+
+![Etherscan Proof](images/etherscangoerli.png)
 
 ## Built With
 
