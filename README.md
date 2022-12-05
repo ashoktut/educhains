@@ -147,6 +147,15 @@ https://goerli.etherscan.io/address/0xb38b65169e77cd9a8dc6b64b69a73c114512c003
 
 ![Etherscan Proof](images/etherscangoerli.png)
 
+## INFURA API for endpoints connected over goerli network
+
+```
+infura key embedded in project
+```
+
+![Etherscan Proof](images/infuraGoerli.png)
+![Etherscan Proof](images/infuraDash.png)
+
 ## Built With
 
 * [Ethereum](https://www.ethereum.org/) - Ethereum is a decentralized platform that runs smart contracts
