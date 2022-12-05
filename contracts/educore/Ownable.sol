@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0;
 
-/// Provides basic authorization control
+/// Provides basic authorization control for the Roles and how they change ownership
 contract Ownable {
     address private origOwner;
 

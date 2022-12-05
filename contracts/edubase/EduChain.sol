@@ -248,21 +248,9 @@ contract EduChain is
         _;
     }
 
-    // // Define a modifier that checks if a person.state of a upc has applied
-    // modifier eligible(uint256 _upc) {
-    //     require(persons[_upc].personState == State.Eligible, "Person is not eligible for further funding by nsfas");
-    //     _;
-    // }
-
-    // // Define a modifier that checks if a person.state of a upc has applied
-    // modifier graduated(uint256 _upc) {
-    //     require(persons[_upc].personState == State.Graduated, "Person has not applied");
-    //     _;
-    // }
-
     // In the constructor set 'owner' to the address that instantiated the contract
-    // and set 'sku' to 1
-    // and set 'upc' to 1
+    // set 'sku' to 1
+    // set 'upc' to 1
     constructor() payable {
         // owner = (msg.sender);
         sku = 1;
@@ -278,8 +266,7 @@ contract EduChain is
         // string memory _personID,
         string memory _courseName,
         string memory _uniName,
-        address _uniID
-        //string memory _productNotes
+        address _uniID        
     ) public onlyStudent {
         // Add the new person as part of applied
         persons[_upc].upc = _upc;
@@ -289,7 +276,7 @@ contract EduChain is
         persons[_upc].originStudentID = _originStudentID;
         persons[_upc].studentName = _studentName;
         persons[_upc].studentSurname = _studentSurname;
-        persons[_upc].personID = _upc + sku; // Product ID is a combo of upc + sku
+        persons[_upc].personID = _upc + sku; // PersonID is a combo of upc + sku -> SA ID number + student number
         persons[_upc].courseName = _courseName;
         persons[_upc].uniName = _uniName;
         persons[_upc].uniID = _uniID;
@@ -535,7 +522,7 @@ contract EduChain is
             emit Paid_Fees(_upc);
         }
 
-    // Define a function 'fetchItemBufferOne' that fetches the data
+    // Define a function 'fetchPersonBufferOne' that fetches the data of a student
     function fetchPersonBufferOne(uint256 _upc)
         public
         view
@@ -549,7 +536,7 @@ contract EduChain is
 
         )
     {
-        // Assign values to the 8 parameters
+        // Assign values to the 6 parameters, ensure that the order of assigning is the same
         personSKU = persons[_upc].sku;
         personUPC = persons[_upc].upc;
         ownerID = persons[_upc].ownerID;
@@ -572,18 +559,14 @@ contract EduChain is
         public
         view
         returns (
-            // uint256 personSKU,
-            // uint256 personUPC,
-            uint256 personID,
-            // string memory studentName,
-            // string memory studentSurname, // Student Surname
-            string memory uniName,
+            uint256 personID, // Combination of SKU and UPC from above
+            string memory uniName, // University name
             string memory courseName, // Course Applying for by person
             uint256 bookPrice, // Book Price
             uint256 monthlyPrice, // Monthly Price
             uint256 rentPrice, // Accommodation Price
             uint256 feesPrice, // University Fees Price
-            // uint256 passRate; // Pass rate of the student
+            // uint256 passRate; // Pass rate of the student - Not yet calculated
             uint256 personState, // Person State as represented in the enum above
             // address studentID; // Metamask-Ethereum address of the student
             address uniID, // Metamask-Ethereum address of the University
@@ -592,7 +575,7 @@ contract EduChain is
             
         )
     {
-        // Assign values to the 15 or 16 parameters
+        // Assign values to the 11 parameters
         // personSKU = persons[_upc].sku;
         // personUPC = persons[_upc].upc;
         personID = persons[_upc].personID;

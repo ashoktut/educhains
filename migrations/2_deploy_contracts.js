@@ -1,8 +1,6 @@
 // migrating the appropriate contracts
-// var StudentRole = artifacts.require("../contracts/eduaccesscontrol/StudentRole.sol");
-// var UniversityRole = artifacts.require("../contracts/eduaccesscontrol/UniversityRole.sol");
-// var AccommodationRole = artifacts.require("../contracts/eduaccesscontrol/AccommodationRole.sol");
-// var NsfasRole = artifacts.require("../contracts/eduaccesscontrol/NsfasRole.sol");
+
+// EduChain.sol is the super class and all the other contract files inherit from this file, thus only EduChain is deployed
 var EduChain = artifacts.require("../contracts/edubase/EduChain.sol");
 
 module.exports = function(deployer) {
