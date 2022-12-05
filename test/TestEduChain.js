@@ -62,7 +62,7 @@ contract('EduChain', function(accounts) {
         // Mark a person as Applied_Uni by calling function applyUni()
         let result = await eduChain.applyUni(upc, originStudentID, studentName, studentSurname, courseName, uniName, uniID , {from: originStudentID})
 
-        // Retrieve the just now saved person from blockchain by calling function fetchPerson()
+        // Retrieve the just now saved person from blockchain by calling function fetchPersonBufferOne() and fetchPersonBufferTwo()
         const resultBufferOne = await eduChain.fetchPersonBufferOne.call(upc)
         const resultBufferTwo = await eduChain.fetchPersonBufferTwo.call(upc)
 
