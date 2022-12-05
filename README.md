@@ -131,6 +131,11 @@ In a separate terminal window, launch the DApp (Frontend):
 npm run dev
 ```
 
+```
+Home Page:
+```
+![truffle test](images/1Landing.png)
+
 ## Etherscan Proof for Contract Deployment on Rinkeby Network
 
 ```
@@ -155,6 +160,14 @@ infura key embedded in project
 
 ![Etherscan Proof](images/infuraGoerli.png)
 ![Etherscan Proof](images/infuraDash.png)
+
+## METAMASK
+
+```
+Install metamask wallet from chrome store or firefox extensions. It is open source and free
+```
+
+![Etherscan Proof](images/metamask.png)
 
 ## Built With
 
